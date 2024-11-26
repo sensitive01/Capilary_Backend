@@ -9,6 +9,7 @@ const vendorRoutes = require('./routes/vendorRoutes');
 const questionRoutes = require('./routes/questionRoutes');
 const entityRoutes = require('./routes/entityRoutes');
 const domainRoutes = require('./routes/domainRoutes');
+const addReqRoutes  = require("./routes/reqRoutes")
 
 dotenv.config();
 
@@ -26,6 +27,8 @@ app.use('/vendors',vendorRoutes);
 app.use('/questions',questionRoutes);
 app.use('/entity',entityRoutes);
 app.use('/domains', domainRoutes);
+app.use('/users', addReqRoutes);
+ 
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
