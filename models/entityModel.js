@@ -2,20 +2,21 @@ const mongoose = require('mongoose');
 
 const entitySchema = new mongoose.Schema(
   {
-    entityName: { type: String }, // Entity Name
-    category: { type: String },  // Category
-    addressLine: { type: String }, // Address Line
-    area: { type: String },      // Area
-    city: { type: String },      // City
-    state: { type: String },     // State/Province
-    pincode: { type: String },   // Postal/Zip Code
-    country: { type: String },   // Country
-    landmark: { type: String },                  // Landmark
-    latitude: { type: Number },  // Latitude
-    longitude: { type: Number }, // Longitude
-    attachments: { type: [String] },            // File attachments (array of file paths or URLs)
+    entityName: { type: String },
+    category: { type: String },
+    addressLine: { type: String },
+    area: { type: String },
+    city: { type: String },
+    state: { type: String },
+    pincode: { type: String },
+    country: { type: String },
+    landmark: { type: String },
+    latitude: { type: String },
+    longitude: { type: String },
+    attachments: { type: [String] },
+    status: { type: String, default: "Active" }
   },
-  { timestamps: true } // Automatically adds `createdAt` and `updatedAt` fields
+  { timestamps: true }
 );
 
 module.exports = mongoose.model('Entity', entitySchema);

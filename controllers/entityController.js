@@ -3,13 +3,14 @@ const Entity = require('../models/entityModel'); // Import the Entity model
 // Create a new entity
 exports.createEntity = async (req, res) => {
     try {
-        console.log("Create Entity Request:", req.body);
-        const entity = new Entity(req.body);
+        const {data} = req.body
+        console.log("Create Entity Request:", data);
+        const entity = new Entity(data);
         await entity.save();
         res.status(201).json({ message: 'Entity created successfully', entity });
     } catch (error) {
         console.error("Error creating entity:", error);
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ message: "Entity creation failed" });
     }
 };
 
