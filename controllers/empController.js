@@ -1,6 +1,6 @@
 const Employee = require("../models/empModel");
-const empIdGenFunction = require("../utils/empIdGenFunction"); 
-const CreateNewReq = require("../models/createNewReqSchema")
+const empIdGenFunction = require("../utils/empIdGenFunction");
+const CreateNewReq = require("../models/createNewReqSchema");
 
 exports.generateEmpId = async (req, res) => {
   try {
@@ -218,13 +218,11 @@ exports.verifyUser = async (req, res) => {
   }
 };
 
-
-
 exports.createNewReq = async (req, res) => {
   try {
     const date = new Date();
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = String(date.getFullYear()).slice(-2);
     const randomNum = Math.floor(Math.random() * 100) + 1;
 
@@ -241,14 +239,14 @@ exports.createNewReq = async (req, res) => {
     await newRequest.save();
 
     res.status(201).json({
-      message: 'Request created successfully',
-      data: newRequest
+      message: "Request created successfully",
+      data: newRequest,
     });
   } catch (error) {
     console.error("Error creating request:", error);
     res.status(500).json({
-      message: 'Error creating request',
-      error: error.message
+      message: "Error creating request",
+      error: error.message,
     });
   }
 };
@@ -256,21 +254,63 @@ exports.createNewReq = async (req, res) => {
 exports.getAllEmployeeReq = async (req, res) => {
   try {
     const reqList = await CreateNewReq.find({ userId: req.params.id });
+    console.log(reqList)
 
     if (reqList.length > 0) {
       return res.status(200).json({
-        message: 'Requests fetched successfully',
-        data: reqList
+        message: "Requests fetched successfully",
+        data: reqList,
       });
     } else {
       return res.status(404).json({
-        message: 'No requests found for the given userId'
+        message: "No requests found for the given userId",
       });
     }
   } catch (err) {
     return res.status(500).json({
-      message: 'Error fetching employee requests',
-      error: err.message
+      message: "Error fetching employee requests",
+      error: err.message,
     });
+  }
+};
+
+exports.getAdminEmployeeReq = async (req, res) => {
+  try {
+    console.log("welcome to admin get data");
+    const reqList = await CreateNewReq.find();
+    console.log("Reqlist", reqList);
+
+    if (reqList.length > 0) {
+      return res.status(200).json({
+        message: "Requests fetched successfully",
+        data: reqList,
+      });
+    } else {
+      return res.status(404).json({
+        message: "No requests found for the given userId",
+      });
+    }
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error fetching employee requests",
+      error: err.message,
+    });
+  }
+};
+
+exports.deleteRequest = async (req, res) => {
+  try {
+    console.log("delete req",req.params.id)
+    const deleteReq = await CreateNewReq.findByIdAndDelete({
+      _id: req.params.id,
+    });
+
+    if (!deleteReq) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+    res.status(200).json({ message: "Request deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };

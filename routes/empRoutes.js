@@ -11,7 +11,9 @@ const {
     createNewEmployee,
     verifyUser,
     createNewReq,
-    getAllEmployeeReq
+    getAllEmployeeReq,
+    getAdminEmployeeReq,
+    deleteRequest
 } = require('../controllers/empController');
 
 const router = express.Router(); // Use Router() for modular routing
@@ -35,6 +37,12 @@ router.post('/create-newrequest/:id',createNewReq);
 router.post('/create-new-employee',createNewEmployee); 
 router.post('/verify-person',verifyUser); 
 router.get('/get-all-req/:id',getAllEmployeeReq); 
+router.get('/get-all-req-admin',getAdminEmployeeReq);
+
+
+router.delete('/delete-req/:id',deleteRequest); 
+
+
 
 
 
