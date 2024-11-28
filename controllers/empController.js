@@ -226,7 +226,7 @@ exports.createNewReq = async (req, res) => {
     const year = String(date.getFullYear()).slice(-2);
     const randomNum = Math.floor(Math.random() * 100) + 1;
 
-    const reqid = `INBH${day}-${month}-${year}${randomNum}`;
+    const reqid = `INBH${day}${month}${year}${randomNum}`;
 
     const newRequest = new CreateNewReq({
       reqid,
@@ -314,3 +314,37 @@ exports.deleteRequest = async (req, res) => {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
+
+
+exports.getIndividualReq = async (req, res) => {
+  try {
+    const {id} = req.params
+    console.log(id)
+
+    const reqList = await CreateNewReq.findOne({ _id: req.params.id });
+    console.log(reqList)
+
+ 
+    if (!reqList || reqList.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "No requests found for the given user ID",
+      });
+    }
+
+  
+    return res.status(200).json({
+      success: true,
+      data: reqList,
+    });
+  } catch (err) {
+  
+    console.error("Error in fetching the requests", err);
+    return res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching the requests",
+      error: err.message,
+    });
+  }
+};
+
