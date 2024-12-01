@@ -10,6 +10,7 @@ const questionRoutes = require('./routes/questionRoutes');
 const entityRoutes = require('./routes/entityRoutes');
 const domainRoutes = require('./routes/domainRoutes');
 const addReqRoutes  = require("./routes/reqRoutes")
+const reqRoutes = require("./routes/reqRoutes") 
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/questions',questionRoutes);
 app.use('/entity',entityRoutes);
 app.use('/domains', domainRoutes);
 app.use('/users', addReqRoutes);
+app.use('/request', reqRoutes);
  
 
 app.listen(port, () => {

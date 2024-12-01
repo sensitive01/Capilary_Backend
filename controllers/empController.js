@@ -220,6 +220,9 @@ exports.verifyUser = async (req, res) => {
 
 exports.createNewReq = async (req, res) => {
   try {
+    console.log("Complinces",req.body)
+
+
     const date = new Date();
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -234,6 +237,7 @@ exports.createNewReq = async (req, res) => {
       commercials: req.body.commercials,
       procurements: req.body.procurements,
       supplies: req.body.supplies,
+      complinces:req.body.complinces
     });
 
     await newRequest.save();
