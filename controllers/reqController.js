@@ -139,7 +139,6 @@ const approveReqByHod = async (req, res) => {
 
 const approveReqByBusiness = async (req, res) => {
   try {
- 
     const { role, reqId } = req.body;
     const { id } = req.params;
     console.log("Welcome to approve req by business", role, reqId, id);
@@ -243,9 +242,6 @@ const approveReqByVendorManagement = async (req, res) => {
   }
 };
 
-
-
-
 const approveReqByLegalTeam = async (req, res) => {
   try {
     const { role, reqId } = req.body;
@@ -296,10 +292,6 @@ const approveReqByLegalTeam = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
-
-
-
 
 const approveReqByInfoSecurity = async (req, res) => {
   try {
@@ -363,9 +355,7 @@ const approveReqByPoTeam = async (req, res) => {
     );
 
     if (!infoSecurityData) {
-      return res
-        .status(404)
-        .json({ message: "PO Team team not found" });
+      return res.status(404).json({ message: "PO Team team not found" });
     }
 
     const reqData = await CreateNewReq.findOne(
@@ -403,9 +393,6 @@ const approveReqByPoTeam = async (req, res) => {
   }
 };
 
-
-
-
 const approveReqByHofTeam = async (req, res) => {
   try {
     const { role, reqId } = req.body;
@@ -417,9 +404,7 @@ const approveReqByHofTeam = async (req, res) => {
     );
 
     if (!hofData) {
-      return res
-        .status(404)
-        .json({ message: "PO Team team not found" });
+      return res.status(404).json({ message: "PO Team team not found" });
     }
 
     const reqData = await CreateNewReq.findOne(
@@ -457,17 +442,58 @@ const approveReqByHofTeam = async (req, res) => {
   }
 };
 
+const getNewNotifications = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("Notification for employee ID:", id);
 
+    // Fetch employee data
+    const employeData = await empModel.findOne({ _id: id }, { empId: 1 });
+    if (!employeData) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+    console.log("Employee Data:", employeData);
 
+    // Fetch requests where the current employee hasn't approved
+    const reqData = await CreateNewReq.find({
+      "approvals.approvalId": { $ne: employeData.empId },
+    });
+    console.log("Request Data:", reqData);
 
+    if (!reqData || reqData.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No pending approvals for this employee" });
+    }
 
+    res.status(200).json({ count: reqData.length, reqData });
+  } catch (err) {
+    console.log("Error in fetching new notifications:", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
+const getApprovedReqData = async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    const employeData = await empModel.findOne({ _id: id }, { empId: 1 });
+    if (!employeData) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+    console.log("Employee Data", employeData);
 
+    const reqData = await CreateNewReq.find({
+      "approvals.approvalId": { $eq: employeData.empId },
+    });
+    console.log("Request Data", reqData);
 
-
-
-
+    res.status(200).json({ reqData });
+  } catch (err) {
+    console.error("Error in fetching new notifications", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 
 module.exports = {
   addReqForm,
@@ -479,5 +505,7 @@ module.exports = {
   approveReqByLegalTeam,
   approveReqByInfoSecurity,
   approveReqByPoTeam,
-  approveReqByHofTeam
+  approveReqByHofTeam,
+  getNewNotifications,
+  getApprovedReqData,
 };

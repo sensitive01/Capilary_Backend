@@ -15,6 +15,11 @@ router.post('/accept-request-info-security/:id', reqController.approveReqByInfoS
 router.post('/accept-request-po-team/:id', reqController.approveReqByPoTeam); 
 router.post('/accept-request-hof-team/:id', reqController.approveReqByHofTeam); 
 
+router.get('/get-new-notification/:id', reqController.getNewNotifications); 
+router.get('/get-approved-req/:id', reqController.getApprovedReqData); 
+
+
+
 
 
 
