@@ -57,6 +57,7 @@ exports.getAllEmployees = async (req, res) => {
 // Read a single employee by empId
 exports.getEmployeeById = async (req, res) => {
   try {
+    console.log("Welcome to edit employee",req.params.id)
     const employee = await Employee.findOne({ _id: req.params.id });
     if (!employee)
       return res.status(404).json({ message: "Employee not found" });
@@ -153,20 +154,22 @@ exports.updateEmployeeStatus = async (req, res) => {
 
 exports.createNewEmployee = async (req, res) => {
   try {
+    console.log(req.body)
     const newEmployee = new Employee({
-      empid: req.body.empid,
+      empId: req.body.empId,
       name: req.body.name,
       contact: req.body.contact,
       email: req.body.email,
       gender: req.body.gender,
       dob: req.body.dob,
-      joinDate: req.body.joinDate,
+      doj: req.body.dateOfJoining,
       role: req.body.role,
       reportingTo: req.body.reportingTo,
       entity: req.body.entity,
       location: req.body.location,
       workType: req.body.workType,
       startTime: req.body.startTime,
+      department:req.body.department,
       endTime: req.body.endTime,
       pincode: req.body.pincode,
       city: req.body.city,
@@ -245,6 +248,7 @@ exports.createNewReq = async (req, res) => {
     res.status(201).json({
       message: "Request created successfully",
       data: newRequest,
+      approvals:newRequest?.approvals||[]
     });
   } catch (error) {
     console.error("Error creating request:", error);

@@ -21,6 +21,7 @@ const employeeSchema = new mongoose.Schema({
     pincode: { type: String },
     country: { type: String },
     landmark: { type: String },
+    depatment:{type:String},
     status: { type: String, default: 'Pending' },
 }, { timestamps: true });
 

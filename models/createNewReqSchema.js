@@ -67,9 +67,11 @@ const complianceSchema = new mongoose.Schema({
 // New approvals schema
 const approvalSchema = new mongoose.Schema({
   departmentName: { type: String }, 
+  nextDepartment:{type:String},
   status: { type: String, default: "Pending" }, 
   approverName: { type: String }, 
-  approvalDate: { type: Date }, 
+  approvalId:{type:String},
+  approvalDate: { type: Date,default: Date.now() }, 
   remarks: { type: String, default: "" }, 
 });
 

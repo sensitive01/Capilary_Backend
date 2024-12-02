@@ -7,6 +7,20 @@ router.post('/add-request', reqController.addReqForm);
 router.put('/chats/:id', reqController.postComments); 
 router.get('/get-all-chats/:id', reqController.getAllChats); 
 
+router.post('/accept-request-hod/:id', reqController.approveReqByHod); 
+router.post('/accept-request-business/:id', reqController.approveReqByBusiness); 
+router.post('/accept-request-vendor/:id', reqController.approveReqByVendorManagement); 
+router.post('/accept-request-legal/:id', reqController.approveReqByLegalTeam); 
+router.post('/accept-request-info-security/:id', reqController.approveReqByInfoSecurity); 
+router.post('/accept-request-po-team/:id', reqController.approveReqByPoTeam); 
+router.post('/accept-request-hof-team/:id', reqController.approveReqByHofTeam); 
+
+
+
+
+
+
+
 
 
 module.exports = router;
