@@ -67,15 +67,16 @@ exports.getEmployeeById = async (req, res) => {
   }
 };
 
-// Update an employee by empId
+
 exports.updateEmployee = async (req, res) => {
   try {
+    console.log(req.body)
     const employee = await Employee.findOneAndUpdate(
       { _id: req.params.id },
       req.body,
       {
-        new: true, // Return the updated document
-        runValidators: true, // Ensure validators run
+        new: true, 
+        runValidators: true, 
       }
     );
     if (!employee)

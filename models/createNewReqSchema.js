@@ -46,6 +46,7 @@ const procurementsSchema = new mongoose.Schema({
 });
 
 const serviceSchema = new mongoose.Schema({
+  description:{type:String},
   productName: { type: String },
   quantity: { type: String },
   price: { type: String },

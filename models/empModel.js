@@ -13,7 +13,8 @@ const employeeSchema = new mongoose.Schema({
     entity: { type: String },
     location: { type: String },
     workType: { type: String },
-    shiftTimings: { type: String },
+    endTime: { type: String },
+    startTime: { type: String },
     addressLine: { type: String },
     area: { type: String },
     city: { type: String },
@@ -21,7 +22,7 @@ const employeeSchema = new mongoose.Schema({
     pincode: { type: String },
     country: { type: String },
     landmark: { type: String },
-    depatment:{type:String},
+    department:{type:String},
     status: { type: String, default: 'Pending' },
 }, { timestamps: true });
 

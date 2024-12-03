@@ -1,6 +1,7 @@
 const CreateNewReq = require("../models/createNewReqSchema");
 const empModel = require("../models/empModel");
 const reqModel = require("../models/reqModel");
+const { createNewReq } = require("./empController");
 
 const addReqForm = async (req, res) => {
   try {
@@ -354,7 +355,7 @@ const approveReqByPoTeam = async (req, res) => {
       { role: 1, name: 1, empId: 1 }
     );
 
-    if (!infoSecurityData) {
+    if (!poTeam) {
       return res.status(404).json({ message: "PO Team team not found" });
     }
 
@@ -398,24 +399,27 @@ const approveReqByHofTeam = async (req, res) => {
     const { role, reqId } = req.body;
     const { id } = req.params;
 
+    // Fetch HOF team member details
     const hofData = await empModel.findOne(
       { _id: id },
       { role: 1, name: 1, empId: 1 }
     );
 
     if (!hofData) {
-      return res.status(404).json({ message: "PO Team team not found" });
+      return res.status(404).json({ message: "HOF team member not found" });
     }
 
+    // Fetch request data
     const reqData = await CreateNewReq.findOne(
       { _id: reqId },
-      { approvals: 1 }
+      { approvals: 1, status: 1 }
     );
-    console.log("Req data", reqData);
+
     if (!reqData) {
       return res.status(404).json({ message: "Request not found" });
     }
 
+    // Update approvals array and status
     const approvalUpdate = await CreateNewReq.updateOne(
       { _id: reqId },
       {
@@ -423,24 +427,28 @@ const approveReqByHofTeam = async (req, res) => {
           approvals: {
             departmentName: "HOF",
             status: "Approved",
-            approverName: poTeam.name,
-            approvalId: poTeam.empId,
+            approverName: hofData.name,
+            approvalId: hofData.empId,
             approvalDate: new Date(),
             remarks: "",
-            nextDepartment: "Proceed the Po invoice",
+            nextDepartment: "Proceed the PO invoice",
           },
+        },
+        $set: {
+          status: "Approved",
         },
       }
     );
 
     res
       .status(200)
-      .json({ message: "Request approved successfully", approvalUpdate });
+      .json({ message: "Request approved successfully and po is generated", approvalUpdate });
   } catch (err) {
-    console.error("Error in approve the request by HOF team", err);
+    console.error("Error in approving the request by HOF team", err);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 const getNewNotifications = async (req, res) => {
   try {
@@ -495,6 +503,74 @@ const getApprovedReqData = async (req, res) => {
   }
 };
 
+const isButtonSDisplay = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("button==>", id);
+
+    // Fetch employee's department details
+    const departmentData = await empModel.findOne(
+      { _id: id },
+      { empId: 1, department: 1 }
+    );
+    console.log(departmentData)
+    if (!departmentData) {
+      return res.status(404).json({ message: "Employee not found" });
+    }
+
+
+    // If the department is "HOD", return true
+    if (departmentData.department === "Head of Department") {
+      return res.status(200).json({ display: true });
+    }
+
+    // Check if the employee's department matches any nextDepartment in approvals
+    const isDisplay = await CreateNewReq.exists({
+      "approvals.nextDepartment": departmentData.department,
+    });
+
+    console.log("isDisplay:", isDisplay);
+
+    if (isDisplay) {
+      return res.status(200).json({ display: true });
+    } else {
+      return res.status(200).json({ display: false });
+    }
+  } catch (err) {
+    console.log("Error in is display button", err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+const generatePo = async (req, res) => {
+  try {
+    console.log("Welcome to generate PO", req.params);
+    
+    const reqData = await CreateNewReq.findOne(
+      { _id: req.params.id },
+      { approvals: 0, commentLogs: 0, complinces: 0 }
+    );
+    
+    console.log(reqData);
+
+    if (!reqData) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+    return res.status(200).json({
+      message: "PO data generated successfully",
+       reqData
+    });
+
+  } catch (err) {
+    console.log("Error in generating PO", err);
+    return res.status(500).json({ message: "Error in generating PO", error: err.message });
+  }
+};
+
+
+
 module.exports = {
   addReqForm,
   postComments,
@@ -508,4 +584,6 @@ module.exports = {
   approveReqByHofTeam,
   getNewNotifications,
   getApprovedReqData,
+  isButtonSDisplay,
+  generatePo
 };

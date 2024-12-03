@@ -24,11 +24,11 @@ router.get('/generate-empid',generateEmpId);
 
 
 
-router.post('/create', createEmployee); // Create an employee
-router.get('/get-all', getAllEmployees); // Get all employees
-router.get('/get/:id', getEmployeeById); // Get an employee by empId
-router.put('/update/:id', updateEmployee); // Update an employee by empId
-router.delete('/delete/:id', deleteEmployee); // Delete an employee by empId
+router.post('/create', createEmployee); 
+router.get('/get-all', getAllEmployees); 
+router.get('/get/:id', getEmployeeById); 
+router.put('/update/:id', updateEmployee); 
+router.delete('/delete/:id', deleteEmployee); 
 router.put('/update-many', updateManyEmployees); 
 router.put('/update-status/:id',updateEmployeeStatus); 
 

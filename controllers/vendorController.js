@@ -27,7 +27,9 @@ exports.getAllVendors = async (req, res) => {
 // Read a single vendor by ID
 exports.getVendorById = async (req, res) => {
   try {
+    console.log(req.params.id)
     const vendor = await Vendor.findOne({ _id: req.params.id });
+    console.log(vendor)
     if (!vendor) return res.status(404).json({ message: "Vendor not found" });
     res.status(200).json(vendor);
   } catch (error) {
