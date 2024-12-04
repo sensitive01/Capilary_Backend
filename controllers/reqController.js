@@ -569,6 +569,59 @@ const generatePo = async (req, res) => {
   }
 };
 
+const updateRequest = async (req, res) => {
+  try {
+    console.log("Welcome to update the request", req.body);
+
+    
+    const {
+      reqid,
+      userId,
+      commercials,
+      procurements,
+      supplies,
+      complinces,
+      status
+    } = req.body;
+
+
+    const updatedRequest = await CreateNewReq.findOneAndUpdate(
+      { reqid: reqid },  
+      {
+        $set: {
+          userId: userId || null, 
+          commercials: commercials || {},
+          procurements: procurements || {},
+          supplies: supplies || {},
+          complinces: complinces || {},
+          status: status || 'Pending' 
+        }
+      },
+      { new: true } 
+    );
+
+  
+    if (!updatedRequest) {
+      return res.status(404).json({
+        message: "Request not found"
+      });
+    }
+
+
+    return res.status(200).json({
+      message: "Request updated successfully",
+      data: updatedRequest
+    });
+
+  } catch (err) {
+    console.error("Error in updating request:", err);
+    return res.status(500).json({
+      message: "Error updating request",
+      error: err.message
+    });
+  }
+};
+
 
 
 module.exports = {
@@ -585,5 +638,6 @@ module.exports = {
   getNewNotifications,
   getApprovedReqData,
   isButtonSDisplay,
-  generatePo
+  generatePo,
+  updateRequest
 };

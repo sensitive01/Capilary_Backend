@@ -26,7 +26,7 @@ const commercialsSchema = new mongoose.Schema({
   department: { type: String },
   entity: { type: String },
   paymentTerms: { type: [paymentTermSchema] },
-  paymentType: { type: String },
+  paymentMode: { type: String },
   shipTo: { type: String },
   site: { type: String },
 });

@@ -19,6 +19,8 @@ router.get('/get-new-notification/:id', reqController.getNewNotifications);
 router.get('/get-approved-req/:id', reqController.getApprovedReqData); 
 router.get('/is-display-button/:id', reqController.isButtonSDisplay); 
 router.get('/generate-po/:id', reqController.generatePo); 
+router.put('/update-request/:id', reqController.updateRequest); 
+
 
 
 
