@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // Existing schemas
 const commentSchema = new mongoose.Schema({
@@ -6,7 +6,7 @@ const commentSchema = new mongoose.Schema({
   senderName: { type: String },
   department: { type: String },
   message: { type: String },
-  topic:{ type: String },
+  topic: { type: String },
   timestamp: { type: Date, default: Date.now },
 });
 
@@ -18,38 +18,48 @@ const paymentTermSchema = new mongoose.Schema({
 });
 
 const commercialsSchema = new mongoose.Schema({
-  amount: { type: String },
   billTo: { type: String },
+  businessUnit: { type: String },
   city: { type: String },
   costCentre: { type: String },
   currency: { type: String },
   department: { type: String },
   entity: { type: String },
-  paymentTerms: { type: [paymentTermSchema] },
+  hod: { type: String },
+  isCreditCardSelected: { type: Boolean },
   paymentMode: { type: String },
+  paymentTerms: { type: [paymentTermSchema] },
   shipTo: { type: String },
   site: { type: String },
+
+  amount: { type: String },
 });
 
-
-
 const procurementsSchema = new mongoose.Schema({
-  competitiveQuotations: { type: [] },
-  poValidityTo: { type: Date },
-  poExpiryDate: { type: Date },
-  poValidityFrom: { type: Date },
+  quotationDate: { type: Date },
   quotationNumber: { type: String },
+
+  uploadedFiles: {
+    type: Map,
+    of: [String],
+  },
   vendor: { type: String },
+  servicePeriod: { type: String },
+
+  poValidityTo: { type: Date },
+  poValidityFrom: { type: Date },
+
+  poExpiryDate: { type: Date },
   remarks: { type: String, default: "" },
-  quotationCopy:{type:String},
-  quotationDate:{ type: Date }
 });
 
 const serviceSchema = new mongoose.Schema({
-  description:{type:String},
   productName: { type: String },
+  productDescription: { type: String },
   quantity: { type: String },
   price: { type: String },
+  tax: { type: String },
+
 });
 
 const suppliesSchema = new mongoose.Schema({
@@ -67,15 +77,14 @@ const complianceSchema = new mongoose.Schema({
 
 // New approvals schema
 const approvalSchema = new mongoose.Schema({
-  departmentName: { type: String }, 
-  nextDepartment:{type:String},
-  status: { type: String, default: "Pending" }, 
-  approverName: { type: String }, 
-  approvalId:{type:String},
-  approvalDate: { type: Date,default: Date.now() }, 
-  remarks: { type: String, default: "" }, 
+  departmentName: { type: String },
+  nextDepartment: { type: String },
+  status: { type: String, default: "Pending" },
+  approverName: { type: String },
+  approvalId: { type: String },
+  approvalDate: { type: Date, default: Date.now() },
+  remarks: { type: String, default: "" },
 });
-
 
 const createnewReqSchema = new mongoose.Schema({
   reqid: { type: String },
@@ -87,9 +96,9 @@ const createnewReqSchema = new mongoose.Schema({
   status: { type: String, default: "Pending" },
   commentLogs: [commentSchema],
   complinces: { type: complianceSchema },
-  approvals: { type: [approvalSchema], default: [] }, 
+  approvals: { type: [approvalSchema], default: [] },
 });
 
-const CreateNewReq = mongoose.model('CreateNewReq', createnewReqSchema);
+const CreateNewReq = mongoose.model("CreateNewReq", createnewReqSchema);
 
 module.exports = CreateNewReq;

@@ -485,15 +485,20 @@ const getApprovedReqData = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const employeData = await empModel.findOne({ _id: id }, { empId: 1 });
+    const employeData = await empModel.findOne({ _id: id }, { empId: 1,department:1 });
     if (!employeData) {
       return res.status(404).json({ message: "Employee not found" });
     }
     console.log("Employee Data", employeData);
 
-    const reqData = await CreateNewReq.find({
-      "approvals.approvalId": { $eq: employeData.empId },
-    });
+    // const reqData = await CreateNewReq.find({
+    //   "approvals.approvalId": { $eq: employeData.empId },
+    // });
+
+    
+    const reqData = await CreateNewReq.find();
+
+
     console.log("Request Data", reqData);
 
     res.status(200).json({ reqData });
