@@ -45,6 +45,10 @@ const procurementsSchema = new mongoose.Schema({
   },
   vendor: { type: String },
   servicePeriod: { type: String },
+  projectCode: { type: String },
+
+  clientName: { type: String },
+
 
   poValidityTo: { type: Date },
   poValidityFrom: { type: Date },

@@ -1,6 +1,7 @@
 const Employee = require("../models/empModel");
 const empIdGenFunction = require("../utils/empIdGenFunction");
 const CreateNewReq = require("../models/createNewReqSchema");
+const sendLoginEmail = require("../utils/sendEmail");
 
 exports.generateEmpId = async (req, res) => {
   try {
@@ -192,15 +193,17 @@ exports.createNewEmployee = async (req, res) => {
 exports.verifyUser = async (req, res) => {
   try {
     console.log(req.body);
+    const {email}=req.body
 
     const employeeData = await Employee.findOne(
       { email: req.body.email },
-      { _id: 1, role: 1 }
+      { _id: 1, role: 1,name:1 }
     );
 
     console.log("Employee data", employeeData);
 
     if (employeeData) {
+      await sendLoginEmail(email,employeeData.name);
       return res.status(200).json({
         success: true,
         message: "Employee verified successfully.",
